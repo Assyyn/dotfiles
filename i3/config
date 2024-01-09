@@ -2,10 +2,7 @@
 # config starts here: #
 #######################
 
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
-# This font is widely installed, provides lots of unicode glyphs, right-to-left
-# text rendering and scalability on retina/hidpi displays (thanks to pango).
+# Font for window titles. 
 font pango: JetBrainsMonoNL Nerd Font 10
 font pango: JetBrainsMonoNL Nerd Font Mono 10
 
@@ -104,31 +101,19 @@ bindsym XF86MonBrightnessUp exec --no-startup-id ~/.config/i3/scripts/volume_bri
 bindsym XF86MonBrightnessDown exec --no-startup-id ~/.config/i3/scripts/volume_brightness.sh brightness_down
 
 # change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+b focus up
-bindsym $mod+o focus right
-
-# alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
 
 # move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+b move up
-bindsym $mod+Shift+o move right
-
-# alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
 
 # split in horizontal orientation
-bindsym $mod+h split h
+bindsym $mod+o split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -146,12 +131,6 @@ bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
-
-# focus the parent container
-bindsym $mod+a focus parent
-
-# open new empty workspace
-bindsym $mod+Shift+n exec --no-startup-id ~/.config/i3/scripts/empty_workspace
 
 # Multimedia Keys
 
@@ -179,10 +158,8 @@ bindsym $mod+p exec --no-startup-id /usr/local/bin/switch-audio-port
 ## App shortcuts
 bindsym $mod+w exec --no-startup-id /usr/bin/brave
 bindsym $mod+n exec --no-startup-id /usr/bin/thunar
-bindsym Print exec "\
-    maim --hidecursor ~/Pictures/Screenshots/$(date +%Y-%b-%d--%H-%M-%S_maim | tr A-Z a-z).png; \
-    i3-nagbar --message 'Screenshot created' --type warning & \
-    sleep 3; pkill i3-nagbar"
+bindsym Print exec --no-startup-id "maim --hidecursor ~/Pictures/Screenshots/$(date +%Y-%b-%d--%H-%M-%S_maim | tr A-Z a-z).png; \
+                    notify-send 'Screenshot created!'"
 
 # Power Profiles menu switcher (rofi)
 bindsym $mod+Shift+p exec --no-startup-id ~/.config/i3/scripts/power-profiles
@@ -193,9 +170,9 @@ bindsym $mod+Shift+p exec --no-startup-id ~/.config/i3/scripts/power-profiles
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1:"
-set $ws2 "2:"
-set $ws3 "3:"
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
 set $ws4 "4"
 set $ws5 "5"
 set $ws6 "6"
@@ -213,8 +190,7 @@ assign [class="Thunar"] $ws3
 # compositor #
 ##############
 
-# transparency
-exec_always --no-startup-id picom --config  ~/.config/picom/picom.conf
+exec_always --no-startup-id picom --config ~/.config/picom.conf
 
 #############################################
 # autostart applications/services on login: #
@@ -239,12 +215,14 @@ exec --no-startup-id nitrogen --restore
 # set powersavings for display:
 exec --no-startup-id xset s 480 dpms 600 600 600
 
+# disable power saving (for example if using xscreensaver)
+#exec --no-startup-id xset -dpms
+
 # Desktop notifications
 exec --no-startup-id /usr/bin/dunst
 
 # Autostart apps as you like
-exec --no-startup-id sleep 2 && alacritty
-exec --no-startup-id ~/.config/i3/scripts/polybar.sh & 
+exec_always --no-startup-id ~/.config/i3/scripts/polybar.sh
 
 ##################
 # floating rules #
@@ -308,57 +286,14 @@ client.urgent            $peach     $base       $peach      $overlay0  $peach
 client.placeholder       $overlay0  $base       $text       $overlay0  $overlay0
 client.background        $base
 
-############################################
-# bar settings (input comes from i3blocks) #
-############################################
-
-# Start i3bar to display a workspace bar
-# (plus the system information i3status finds out, if available)
-bar {
-		font pango: Noto Sans Regular 10
-		status_command i3blocks -c ~/.config/i3/i3blocks.conf
-    	position bottom
-	    tray_padding 0
-
-        strip_workspace_numbers yes
-
-        colors {
-            separator          $base
-            background         $base
-            statusline         $text
-            focused_statusline $text
-            active_workspace   $base $text $blue
-            focused_separator  $base
-            focused_workspace  $base $base $maroon
-            active_workspace   $base $base $blue
-            inactive_workspace $base $base $surface1
-            urgent_workspace   $base $base $surface1
-            binding_mode       $base $base $surface1
-         } 
-}
-
 #####################################
 # Application menu handled by rofi: #
 #####################################
 
-## rofi bindings fancy application menu ($mod+d /F9 optional disabled)
-
+## rofi bindings fancy application menu
 bindsym $mod+d exec --no-startup-id rofi -modi drun -show drun \
 		-config ~/.config/rofi/rofidmenu.rasi
 
-#bindsym F9 exec --no-startup-id rofi -modi drun -show drun \
-#		-config ~/.config/rofi/rofidmenu.rasi
-
-## rofi bindings for window menu ($mod+t /F10 optional disabled)
-
+## rofi bindings for window menu
 bindsym $mod+t exec --no-startup-id rofi -show window \
 		-config ~/.config/rofi/rofidmenu.rasi
-
-#bindsym F10 exec --no-startup-id rofi -show window \
-#		-config ~/.config/rofi/rofidmenu.rasi
-
-## rofi bindings to manage clipboard (install rofi-greenclip from the AUR)
-
-#exec --no-startup-id greenclip daemon>/dev/null
-#bindsym $mod+c exec --no-startup-id rofi -modi "clipboard:greenclip print" -show clipboard \
-#		-config ~/.config/rofi/rofidmenu.rasi

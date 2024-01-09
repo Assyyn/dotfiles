@@ -7,4 +7,4 @@ killall -q polybar
 while pgrep -x polybar >/dev/null; do sleep 1; done
 
 # Launch polybar
-polybar top &
+polybar top 2>&1 | tee -a /tmp/polybar_top.log & disown

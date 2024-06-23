@@ -9,3 +9,8 @@ A list of dependencies to install for the i3 config to work "properly":
 - dunst
 - polybar
 - zsh
+
+A list of the neovim config system dependencies:
+- ripgrep
+- fd
+- xclip
